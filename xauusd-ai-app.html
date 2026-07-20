@@ -1,0 +1,506 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+* { box-sizing: border-box; }
+.xg-root { background:#14120F; color:#EDE6D6; font-family:'Inter',sans-serif; min-height:100%; padding:1.75rem 1.1rem 3rem; }
+.xg-wrap { max-width:640px; margin:0 auto; }
+.xg-eyebrow { font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.14em; color:#C9A227; text-transform:uppercase; margin:0 0 .4rem; }
+.xg-title { font-family:'Fraunces',serif; font-weight:500; font-size:28px; line-height:1.15; margin:0 0 .35rem; color:#F3ECDC; }
+.xg-sub { font-size:13.5px; color:#9C9686; margin:0 0 1.3rem; line-height:1.55; }
+.xg-tabs { display:flex; gap:6px; border-bottom:1px solid #3A3428; margin-bottom:1.4rem; overflow-x:auto; }
+.xg-tabbtn { font-family:'Inter',sans-serif; font-size:13.5px; font-weight:500; color:#9C9686; background:none; border:none; padding:.6rem .3rem; cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; margin-bottom:-1px; }
+.xg-tabbtn.on { color:#E8C468; border-bottom-color:#C9A227; }
+.xg-tab { display:none; }
+.xg-tab.on { display:block; }
+.xg-btn { font-family:'Inter',sans-serif; font-weight:500; font-size:14px; background:#C9A227; color:#1A1712; border:none; padding:.8rem 1.3rem; border-radius:3px; cursor:pointer; }
+.xg-btn:hover:not(:disabled){background:#E8C468;}
+.xg-btn:disabled{background:#4A4335; color:#9C9686;}
+.xg-btn-ghost { background:transparent; color:#E8C468; border:1px solid #4A4335; font-family:'Inter',sans-serif; font-size:13px; padding:.55rem 1rem; border-radius:3px; cursor:pointer; }
+.xg-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:.9rem; }
+.xg-field { display:flex; flex-direction:column; gap:4px; flex:1; min-width:130px; }
+.xg-field label { font-size:12px; color:#9C9686; }
+.xg-field input, .xg-field select { background:#1E1B17; border:1px solid #3A3428; color:#EDE6D6; padding:.55rem .6rem; border-radius:3px; font-family:'IBM Plex Mono',monospace; font-size:13.5px; }
+.xg-cert { margin-top:1.4rem; position:relative; border:1px solid #3A3428; background:#1E1B17; padding:1.9rem 1.5rem 1.4rem; }
+.xg-cert::before,.xg-cert::after,.xg-cbl,.xg-cbr { content:""; position:absolute; width:16px; height:16px; border-color:#C9A227; }
+.xg-cert::before{top:-1px;left:-1px;border-top:2px solid #C9A227;border-left:2px solid #C9A227;}
+.xg-cert::after{top:-1px;right:-1px;border-top:2px solid #C9A227;border-right:2px solid #C9A227;}
+.xg-cbl{bottom:-1px;left:-1px;border-bottom:2px solid #C9A227;border-left:2px solid #C9A227;}
+.xg-cbr{bottom:-1px;right:-1px;border-bottom:2px solid #C9A227;border-right:2px solid #C9A227;}
+.xg-cert-head { display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #3A3428; padding-bottom:.8rem; margin-bottom:1rem; flex-wrap:wrap; gap:8px; }
+.xg-pair { font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#7A7568; }
+.xg-price { font-family:'IBM Plex Mono',monospace; font-size:25px; color:#F3ECDC; font-weight:500; }
+.xg-ts { font-family:'IBM Plex Mono',monospace; font-size:11px; color:#7A7568; }
+.xg-stamp-row { display:flex; align-items:center; gap:1rem; margin-bottom:1.2rem; }
+.xg-stamp { width:70px; height:70px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; text-align:center; font-family:'Fraunces',serif; font-weight:600; font-size:11.5px; line-height:1.15; border:2.5px solid currentColor; position:relative; }
+.xg-stamp::before{content:"";position:absolute;inset:5px;border:1px solid currentColor;border-radius:50%;opacity:.55;}
+.xg-stamp-buy{color:#7FBF87;} .xg-stamp-sell{color:#D3766B;} .xg-stamp-hold{color:#D4AF37;}
+.xg-conf-track { width:100%; max-width:200px; height:5px; background:#3A3428; }
+.xg-conf-fill { height:100%; background:#C9A227; }
+.xg-conf-num { font-family:'IBM Plex Mono',monospace; font-size:12px; color:#E8C468; margin-top:4px; }
+.xg-section-label { font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:#7A7568; margin:1rem 0 .45rem; }
+.xg-levels { display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:10px; }
+.xg-level-card { background:#14120F; border:1px solid #3A3428; padding:.6rem .7rem; }
+.xg-level-card .l { font-size:11px; color:#9C9686; }
+.xg-level-card .v { font-family:'IBM Plex Mono',monospace; font-size:14.5px; color:#F3ECDC; margin-top:2px; }
+.xg-drivers { margin:0; padding:0; list-style:none; }
+.xg-drivers li { font-size:13.5px; color:#D9D2C0; padding:6px 0 6px 16px; position:relative; line-height:1.5; border-bottom:1px solid #29251E; }
+.xg-drivers li:last-child{border-bottom:none;}
+.xg-drivers li::before{content:"";position:absolute;left:0;top:14px;width:5px;height:5px;background:#C9A227;}
+.xg-outlook { font-size:13.5px; color:#D9D2C0; line-height:1.6; margin:.2rem 0 0; }
+.xg-pos-box { background:#14120F; border:1px solid #3A3428; padding:.9rem 1rem; margin-top:1rem; }
+.xg-pos-box .row2 { display:flex; justify-content:space-between; font-size:13px; padding:3px 0; color:#D9D2C0; }
+.xg-pos-box .row2 b { color:#F3ECDC; font-family:'IBM Plex Mono',monospace; font-weight:500; }
+.xg-warn { color:#D3766B; font-size:12.5px; margin-top:6px; }
+.xg-disclaimer { margin-top:1.4rem; padding:.85rem .95rem; background:#2A1E18; border-left:2px solid #A3453B; font-size:12px; color:#C9AA9F; line-height:1.55; }
+.xg-state { font-size:13.5px; color:#9C9686; margin-top:1.2rem; }
+.xg-state.xg-err{color:#D3766B;}
+.xg-dot { display:inline-block; width:6px; height:6px; background:#C9A227; border-radius:50%; margin-right:7px; animation:xg-pulse 1s ease-in-out infinite; }
+@keyframes xg-pulse{0%,100%{opacity:.3;}50%{opacity:1;}}
+.xg-alert { margin-bottom:1rem; padding:.75rem .9rem; background:#2A2210; border-left:2px solid #C9A227; font-size:13px; color:#E8C468; }
+.xg-saved { font-size:12px; color:#7FBF87; margin-left:8px; }
+.xg-chat { border:1px solid #3A3428; background:#1E1B17; height:340px; overflow-y:auto; padding:1rem; margin-bottom:.8rem; display:flex; flex-direction:column; gap:10px; }
+.xg-msg { font-size:13.5px; line-height:1.55; padding:.55rem .75rem; border-radius:5px; max-width:85%; }
+.xg-msg.user { background:#2A2617; align-self:flex-end; color:#F3ECDC; }
+.xg-msg.ai { background:#14120F; align-self:flex-start; color:#D9D2C0; border:1px solid #3A3428; }
+.xg-chat-row { display:flex; gap:8px; }
+.xg-chat-row input { flex:1; background:#1E1B17; border:1px solid #3A3428; color:#EDE6D6; padding:.6rem .7rem; border-radius:3px; font-family:'Inter',sans-serif; font-size:13.5px; }
+.xg-history-item { border-bottom:1px solid #29251E; padding:8px 0; font-size:12.5px; color:#9C9686; display:flex; justify-content:space-between; gap:8px; }
+.xg-history-item b { color:#D9D2C0; }
+.xg-chart-wrap { border:1px solid #3A3428; background:#1E1B17; padding:.6rem; }
+.xg-chart-wrap iframe { width:100%; height:520px; border:none; display:block; }
+.xg-chart-note { font-size:12px; color:#7A7568; margin-top:.6rem; line-height:1.55; }
+.xg-tech-grid { display:grid; grid-template-columns:1fr; gap:8px; }
+.xg-tech-card { background:#14120F; border:1px solid #3A3428; padding:.65rem .8rem; }
+.xg-tech-card .l { font-size:11px; color:#9C9686; margin-bottom:2px; }
+.xg-tech-card .v { font-size:13.5px; color:#D9D2C0; line-height:1.5; }
+</style>
+
+<div class="xg-root">
+  <div class="xg-wrap">
+    <p class="xg-eyebrow">XAUUSD &middot; AI tahlil va signal ilovasi</p>
+    <h1 class="xg-title">Oltin bozori — AI yordamchi</h1>
+    <p class="xg-sub">Telefon yoki noutbuk brauzerida ochiq holda ishlaydi. Jonli TradingView grafigi (RSI, MACD, Bollinger Bands, hajm) bilan birga, Fibonacci, order block va sham modellariga asoslangan AI tahlil, yangiliklar va sizning hisobingizga mos xavf hisob-kitobi asosida signal beradi.</p>
+
+    <div class="xg-tabs">
+      <button class="xg-tabbtn on" data-tab="dash">Bosh sahifa</button>
+      <button class="xg-tabbtn" data-tab="chart">Grafik</button>
+      <button class="xg-tabbtn" data-tab="profile">Xavf va profil</button>
+      <button class="xg-tabbtn" data-tab="chat">AI yordamchi</button>
+      <button class="xg-tabbtn" data-tab="history">Tarix</button>
+    </div>
+
+    <div class="xg-tab on" id="tab-dash">
+      <div class="xg-row">
+        <button class="xg-btn" id="xg-run">Tahlil qilish</button>
+        <button class="xg-btn-ghost" id="xg-notif">Bildirishnomalarni yoqish</button>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9C9686;">
+          <input type="checkbox" id="xg-auto"> Avtomatik yangilash
+        </label>
+        <select id="xg-interval" style="background:#1E1B17;border:1px solid #3A3428;color:#EDE6D6;padding:.4rem;border-radius:3px;font-size:12.5px;">
+          <option value="5">5 daqiqa</option>
+          <option value="15" selected>15 daqiqa</option>
+          <option value="30">30 daqiqa</option>
+          <option value="60">60 daqiqa</option>
+        </select>
+      </div>
+      <div id="xg-alertbox"></div>
+      <div id="xg-output"></div>
+    </div>
+
+    <div class="xg-tab" id="tab-chart">
+      <p class="xg-section-label" style="margin-top:0;">XAUUSD grafigi (AI qidiruvi asosida)</p>
+      <div class="xg-row"><button class="xg-btn" id="xg-chart-refresh">Grafikni yangilash</button></div>
+      <div class="xg-chart-wrap"><div id="xg-chart-container" style="height:420px;"></div></div>
+      <div id="xg-chart-msg" class="xg-chart-note"></div>
+      <p class="xg-chart-note">Muhim: bu muhitda tashqi bozor-ma'lumot provayderlariga (Twelve Data va h.k.) brauzerdan to'g'ridan-to'g'ri ulanish bloklangan — shuning uchun API kalit kiritish ishlamadi. Buning o'rniga grafik AI'ning web qidiruvi orqali topgan so'nggi kunlik narxlar asosida chiziladi — bu real vaqtli tick ma'lumot emas, taxminiy kunlik sham ko'rinishi. Aniq, jonli grafik uchun <a href="https://www.tradingview.com/chart/fQLUhIrs/" target="_blank" rel="noopener" style="color:#E8C468;">TradingView'ni shu havola orqali</a> alohida oynada oching.</p>
+    </div>
+
+    <div class="xg-tab" id="tab-profile">
+      <p class="xg-section-label">Hisob ma'lumotlari</p>
+      <div class="xg-row">
+        <div class="xg-field"><label>Hisob balansi (USD)</label><input type="number" id="xg-balance" value="1000" min="0"></div>
+        <div class="xg-field"><label>Leverage (masalan 100 = 1:100)</label><input type="number" id="xg-leverage" value="100" min="1"></div>
+      </div>
+      <div class="xg-row">
+        <div class="xg-field"><label>Broker spredi (USD, masalan 0.30)</label><input type="number" step="0.01" id="xg-spread" value="0.30" min="0"></div>
+        <div class="xg-field"><label>Bitta savdodagi xavf (%)</label><input type="number" id="xg-risk" value="1" min="0.1" step="0.1"></div>
+      </div>
+      <div class="xg-row">
+        <div class="xg-field"><label>Broker nomi (ixtiyoriy)</label><input type="text" id="xg-broker" placeholder="masalan Exness"></div>
+      </div>
+      <div class="xg-row">
+        <button class="xg-btn" id="xg-save-profile">Saqlash</button>
+        <span class="xg-saved" id="xg-saved-msg" style="display:none;">Saqlandi</span>
+      </div>
+      <p class="xg-sub" style="margin-top:.5rem;">Bu ma'lumotlar signalni sizga mos lot hajmi va kerakli kafolat (margin) bilan moslashtirish uchun ishlatiladi. Hisob-kitob shu brauzerda saqlanadi va hech qayerga yuborilmaydi (faqat AI tahlil so'rovlari uchun umumiy matn yuboriladi).</p>
+    </div>
+
+    <div class="xg-tab" id="tab-chat">
+      <div class="xg-chat" id="xg-chatbox"></div>
+      <div class="xg-chat-row">
+        <input type="text" id="xg-chat-input" placeholder="Masalan: hozirgi signal nega SOTIB OLISH?">
+        <button class="xg-btn" id="xg-chat-send">Yuborish</button>
+      </div>
+    </div>
+
+    <div class="xg-tab" id="tab-history">
+      <p class="xg-section-label">So'nggi tahlillar</p>
+      <div id="xg-history-list"></div>
+    </div>
+
+    <div class="xg-disclaimer">
+      Muhim: bu ilova sun'iy intellekt tomonidan yaratilgan tahlil va hisob-kitoblarni beradi, litsenziyalangan moliyaviy maslahat emas. Signal va narx darajalari taxminiy bo'lib, real broker savdo tizimiga ulanmagan — buyurtmalarni o'zingiz broker platformangizda joylashtirasiz. Bildirishnomalar faqat shu sahifa brauzerda ochiq turgan vaqtda ishlaydi; telefon ilovasi yopiq bo'lganda fon bildirishnomasi yubormaydi. Leverage bilan savdo yuqori xavfli — faqat yo'qotishga tayyor mablag' bilan ishlang.
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<script>
+(function(){
+  const tabs = document.querySelectorAll('.xg-tabbtn');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.xg-tab').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    document.getElementById('tab-'+t.dataset.tab).classList.add('on');
+  }));
+
+  let chartInstance = null, candleSeries = null;
+  let lastCandles = [];
+
+  async function loadChart() {
+    const msgEl = document.getElementById('xg-chart-msg');
+    const refreshBtn = document.getElementById('xg-chart-refresh');
+    refreshBtn.disabled = true;
+    msgEl.textContent = 'Grafik uchun so\'nggi narxlar qidirilmoqda...';
+    try {
+      const prompt = `Web qidiruv orqali XAUUSD (oltin) uchun so'nggi 20 ish kunidagi kunlik narx ma'lumotlarini (ochilish, eng yuqori, eng past, yopilish) top, masalan investing.com yoki shunga o'xshash moliyaviy ma'lumot manbalaridan. FAQAT quyidagi formatda sof JSON massiv qaytar, boshqa hech qanday matnsiz:
+[{"sana":"YYYY-MM-DD","ochilish":0000.00,"yuqori":0000.00,"past":0000.00,"yopilish":0000.00}, ...]
+Eng eskisidan eng yangisigacha tartiblangan, kamida 15 ta kun bo'lsin.`;
+      const text = await callClaude(prompt, true);
+      const start = text.indexOf('['), end = text.lastIndexOf(']');
+      if (start === -1 || end === -1) throw new Error('Ma\'lumot topilmadi');
+      const raw = JSON.parse(text.slice(start, end + 1));
+      const candles = raw.map(v => ({
+        time: Math.floor(new Date(v.sana + 'T00:00:00Z').getTime() / 1000),
+        open: parseFloat(v.ochilish), high: parseFloat(v.yuqori), low: parseFloat(v.past), close: parseFloat(v.yopilish)
+      })).filter(c => !isNaN(c.time) && !isNaN(c.close)).sort((a,b) => a.time - b.time);
+      if (!candles.length) throw new Error('Bo\'sh ma\'lumot');
+      lastCandles = candles;
+      msgEl.textContent = 'AI qidiruvi asosidagi taxminiy kunlik grafik (real vaqtli tick ma\'lumot emas).';
+
+      const container = document.getElementById('xg-chart-container');
+      if (!chartInstance && window.LightweightCharts) {
+        chartInstance = LightweightCharts.createChart(container, {
+          layout: { background: { color: '#1E1B17' }, textColor: '#9C9686' },
+          grid: { vertLines: { color: '#29251E' }, horzLines: { color: '#29251E' } },
+          timeScale: { timeVisible: false, borderColor: '#3A3428' },
+          rightPriceScale: { borderColor: '#3A3428' },
+          width: container.clientWidth, height: 420
+        });
+        candleSeries = chartInstance.addCandlestickSeries({
+          upColor: '#7FBF87', downColor: '#D3766B', borderVisible: false,
+          wickUpColor: '#7FBF87', wickDownColor: '#D3766B'
+        });
+        window.addEventListener('resize', () => { if (chartInstance) chartInstance.applyOptions({ width: container.clientWidth }); });
+      }
+      if (candleSeries) candleSeries.setData(candles);
+    } catch(e) {
+      msgEl.textContent = 'Grafik ma\'lumotini olishda xatolik yuz berdi. "Grafikni yangilash" tugmasi bilan qayta urinib ko\'ring.';
+      console.error(e);
+    } finally {
+      refreshBtn.disabled = false;
+    }
+  }
+
+  function candleSummary() {
+    if (!lastCandles.length) return '';
+    const recent = lastCandles.slice(-20);
+    const highs = recent.map(c => c.high), lows = recent.map(c => c.low);
+    const swingHigh = Math.max(...highs), swingLow = Math.min(...lows);
+    const lastClose = recent[recent.length - 1].close;
+    return `Grafik bo'limida AI qidiruvi orqali topilgan so'nggi ${recent.length} kunlik XAUUSD narxlari: eng yuqori $${swingHigh.toFixed(2)}, eng past $${swingLow.toFixed(2)}, oxirgi yopilish narxi $${lastClose.toFixed(2)}. Fibonacci va order block darajalarini shu diapazon asosida hisobla.`;
+  }
+
+  document.getElementById('xg-chart-refresh').addEventListener('click', loadChart);
+  document.querySelector('.xg-tabbtn[data-tab="chart"]').addEventListener('click', () => { if (!lastCandles.length) loadChart(); });
+
+  let settings = { balance:1000, leverage:100, spread:0.30, risk:1, broker:'' };
+  let lastPrice = null;
+  let lastSignal = null;
+  let history = [];
+  let autoTimer = null;
+
+  async function loadState() {
+    try {
+      const s = await window.storage.get('xg-settings', false);
+      if (s && s.value) settings = JSON.parse(s.value);
+    } catch(e) {}
+    document.getElementById('xg-balance').value = settings.balance;
+    document.getElementById('xg-leverage').value = settings.leverage;
+    document.getElementById('xg-spread').value = settings.spread;
+    document.getElementById('xg-risk').value = settings.risk;
+    document.getElementById('xg-broker').value = settings.broker || '';
+
+    try {
+      const h = await window.storage.get('xg-history', false);
+      if (h && h.value) history = JSON.parse(h.value);
+    } catch(e) {}
+    try {
+      const l = await window.storage.get('xg-last-state', false);
+      if (l && l.value) { const p = JSON.parse(l.value); lastPrice = p.price; lastSignal = p.signal; }
+    } catch(e) {}
+    renderHistory();
+    loadChart();
+  }
+
+  document.getElementById('xg-save-profile').addEventListener('click', async () => {
+    settings = {
+      balance: parseFloat(document.getElementById('xg-balance').value) || 0,
+      leverage: parseFloat(document.getElementById('xg-leverage').value) || 1,
+      spread: parseFloat(document.getElementById('xg-spread').value) || 0,
+      risk: parseFloat(document.getElementById('xg-risk').value) || 1,
+      broker: document.getElementById('xg-broker').value || ''
+    };
+    try {
+      await window.storage.set('xg-settings', JSON.stringify(settings), false);
+      const msg = document.getElementById('xg-saved-msg');
+      msg.style.display = 'inline'; setTimeout(()=>msg.style.display='none', 2000);
+    } catch(e) { console.error(e); }
+  });
+
+  document.getElementById('xg-notif').addEventListener('click', () => {
+    if (!('Notification' in window)) { alert('Brauzeringiz bildirishnomalarni qo\'llab-quvvatlamaydi.'); return; }
+    Notification.requestPermission().then(p => {
+      if (p === 'granted') notify('Bildirishnomalar yoqildi', 'Katta narx o\'zgarishlari va signal yangilanishlari haqida xabar berasiz.');
+    });
+  });
+
+  function notify(title, body) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      try { new Notification(title, { body }); } catch(e) {}
+    }
+    const box = document.getElementById('xg-alertbox');
+    box.innerHTML = '<div class="xg-alert">' + escapeHtml(title) + ' — ' + escapeHtml(body) + '</div>';
+  }
+
+  function beep() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.frequency.value = 720; o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.08, ctx.currentTime);
+      o.start(); o.stop(ctx.currentTime + 0.18);
+    } catch(e) {}
+  }
+
+  function escapeHtml(s){ const d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
+  function parseNum(s){ if (s==null) return null; const m = String(s).replace(/,/g,'').match(/-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : null; }
+  function stampClass(sig){ const s=(sig||'').toUpperCase(); if (s.includes('SOTIB')||s.includes('BUY')) return 'xg-stamp-buy'; if (s.includes('SOTISH')||s.includes('SELL')) return 'xg-stamp-sell'; return 'xg-stamp-hold'; }
+  function extractJson(text){ const a=text.indexOf('{'), b=text.lastIndexOf('}'); if(a===-1||b===-1||b<a) throw new Error('JSON topilmadi'); return JSON.parse(text.slice(a,b+1)); }
+
+  async function callClaude(prompt, withSearch) {
+    const body = { model:"claude-sonnet-4-6", max_tokens:1000, messages:[{role:"user", content:prompt}] };
+    if (withSearch) body.tools = [{ type:"web_search_20250305", name:"web_search" }];
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body)
+    });
+    if (!resp.ok) throw new Error('So\'rov xatosi: '+resp.status);
+    const data = await resp.json();
+    return (data.content||[]).map(b => b.type==='text'?b.text:'').filter(Boolean).join('\n');
+  }
+
+  const btn = document.getElementById('xg-run');
+  const output = document.getElementById('xg-output');
+
+  async function runAnalysis() {
+    btn.disabled = true; btn.textContent = 'Tahlil qilinmoqda...';
+    output.innerHTML = '<p class="xg-state"><span class="xg-dot"></span>Narx harakati, shamlar va yangiliklar tekshirilmoqda...</p>';
+    document.getElementById('xg-alertbox').innerHTML = '';
+
+    const prompt = `Sen "smart money concepts" va klassik texnik tahlil usullarida tajribali oltin (XAUUSD) bozori tahlilchisisan. Web qidiruv orqali quyidagilarni top: joriy XAUUSD spot narxi, so'nggi sham (candlestick) harakati va tendensiyasi, va so'nggi 24-48 soatdagi bozorga ta'sir qiluvchi asosiy yangiliklar.
+
+Tahlilingda FAQAT support/resistance bilan cheklanma — quyidagi texnikalarni ham qo'llab xulosa chiqar:
+- Fibonacci retracement darajalari (so'nggi sezilarli harakat asosida 38.2%, 50%, 61.8% darajalarini taxmin qil)
+- Order block (institutsional/"smart money" order block) zonalarini aniqla
+- Sham (candlestick) modellarini top (masalan yutuvchi sham/engulfing, pin bar, doji, ichki bar va h.k.)
+- Bularning barchasini support/resistance va yangiliklar bilan birlashtirib, yakuniy signalni shakllantir
+
+FAQAT quyidagi formatda sof JSON qaytar (kod bloki, izoh yoki boshqa matnsiz):
+{
+  "narx": "joriy narx, masalan $2415.20",
+  "vaqt": "ma'lumot holati sanasi/vaqti",
+  "tendensiya": "ko'tarilish" yoki "pasayish" yoki "yon tomon",
+  "support": "narx darajasi, masalan $2398",
+  "resistance": "narx darajasi, masalan $2432",
+  "fibonacci": "asosiy fibonacci darajalari qisqacha, masalan 38.2%: $2405, 61.8%: $2390",
+  "order_block": "aniqlangan order block zonasi va yo'nalishi, masalan $2400-2406 oralig'idagi bullish order block",
+  "sham_pattern": "aniqlangan sham modeli va joyi, masalan $2408 atrofida bullish engulfing",
+  "signal": "SOTIB OLISH" yoki "SOTISH" yoki "KUTIB TURISH",
+  "ishonch": 0-100 orasidagi butun son,
+  "kirish_narxi": "aniq narx darajasi, masalan $2410",
+  "stop_loss": "narx darajasi",
+  "take_profit": "narx darajasi",
+  "sabablar": ["texnik va fundamental omillarni aralashtirgan 3-4 ta qisqa band"],
+  "istiqbol": "1-2 gapli qisqa muddatli istiqbol",
+  "katta_ozgarish": true yoki false (so'nggi 24 soatda 1% dan ortiq keskin harakat bo'lsa true),
+  "katta_ozgarish_izoh": "agar katta_ozgarish true bo'lsa qisqa izoh, aks holda bo'sh satr",
+  "imkoniyat": true yoki false (agar yangi yangilik yoki sham/texnik o'zgarish natijasida ishonchi yuqori, foyda keltirishi mumkin bo'lgan aniq savdo imkoniyati paydo bo'lgan bo'lsa true),
+  "imkoniyat_izohi": "agar imkoniyat true bo'lsa, nima uchun bu yaxshi imkoniyat ekanini 1 gapda tushuntir, aks holda bo'sh satr"
+}
+Barchasi o'zbek tilida bo'lsin. kirish_narxi, stop_loss, take_profit albatta aniq raqamli narx sifatida berilsin (masalan $2410.50), shart shaklida emas.` + (candleSummary() ? '\n\n' + candleSummary() : '');
+
+    try {
+      const text = await callClaude(prompt, true);
+      const r = extractJson(text);
+      render(r);
+
+      const priceNum = parseNum(r.narx);
+      let bigMove = !!r.katta_ozgarish;
+      let changeMsg = r.katta_ozgarish_izoh || '';
+      if (lastPrice != null && priceNum != null) {
+        const pct = Math.abs((priceNum - lastPrice) / lastPrice * 100);
+        if (pct >= 0.5) { bigMove = true; changeMsg = 'Oxirgi tekshiruvdan beri narx ' + pct.toFixed(2) + '% o\'zgardi. ' + changeMsg; }
+      }
+      if (r.imkoniyat) { notify('Yaxshi savdo imkoniyati', r.imkoniyat_izohi || 'Yangilik yoki sham o\'zgarishi asosida foydali imkoniyat aniqlandi.'); beep(); }
+      else if (bigMove) { notify('Katta bozor o\'zgarishi', changeMsg || 'Bozorda sezilarli harakat kuzatilmoqda.'); beep(); }
+      else if (lastSignal && r.signal && lastSignal !== r.signal) { notify('Signal yangilandi', 'Yangi signal: ' + r.signal); beep(); }
+
+      lastPrice = priceNum; lastSignal = r.signal;
+      try { await window.storage.set('xg-last-state', JSON.stringify({price:lastPrice, signal:lastSignal}), false); } catch(e){}
+
+      history.unshift({ time: new Date().toLocaleString('uz-UZ'), narx: r.narx, signal: r.signal, ishonch: r.ishonch });
+      history = history.slice(0, 20);
+      try { await window.storage.set('xg-history', JSON.stringify(history), false); } catch(e){}
+      renderHistory();
+    } catch(err) {
+      output.innerHTML = '<p class="xg-state xg-err">Tahlilni olishda xatolik yuz berdi. Birozdan so\'ng qayta urinib ko\'ring.</p>';
+      console.error(err);
+    } finally {
+      btn.disabled = false; btn.textContent = 'Qayta tahlil qilish';
+    }
+  }
+
+  function calcPosition(entry, stop, price) {
+    if (entry==null || stop==null || price==null) return null;
+    const priceMove = Math.abs(entry - stop);
+    if (priceMove <= 0) return null;
+    const riskAmount = settings.balance * (settings.risk/100);
+    const lots = riskAmount / (priceMove * 100);
+    const marginRequired = (lots * 100 * price) / settings.leverage;
+    const spreadCost = settings.spread * lots * 100;
+    return { lots, marginRequired, riskAmount, spreadCost, overLeveraged: marginRequired > settings.balance };
+  }
+
+  function render(r) {
+    const conf = Math.max(0, Math.min(100, parseInt(r.ishonch,10)||0));
+    const drivers = Array.isArray(r.sabablar) ? r.sabablar : [];
+    const sc = stampClass(r.signal);
+    const priceNum = parseNum(r.narx);
+    const entryNum = parseNum(r.kirish_narxi);
+    const stopNum = parseNum(r.stop_loss);
+    const pos = calcPosition(entryNum, stopNum, priceNum || entryNum);
+
+    let posHtml = '';
+    if (pos) {
+      posHtml = `<div class="xg-pos-box">
+        <div class="row2"><span>Tavsiya etilgan lot hajmi</span><b>${pos.lots.toFixed(2)} lot</b></div>
+        <div class="row2"><span>Xavf miqdori</span><b>$${pos.riskAmount.toFixed(2)}</b></div>
+        <div class="row2"><span>Kerakli kafolat (margin)</span><b>$${pos.marginRequired.toFixed(2)}</b></div>
+        <div class="row2"><span>Taxminiy spred xarajati</span><b>$${pos.spreadCost.toFixed(2)}</b></div>
+        ${pos.overLeveraged ? '<div class="xg-warn">Ogohlantirish: bu lot hajmi uchun kerakli kafolat balansingizdan oshadi. Lot hajmini kamaytiring yoki xavf foizini pasaytiring.</div>' : ''}
+      </div>`;
+    }
+
+    output.innerHTML = `
+      <div class="xg-cert">
+        <div class="xg-cbl"></div><div class="xg-cbr"></div>
+        <div class="xg-cert-head">
+          <div><div class="xg-pair">XAU / USD</div><div class="xg-price">${escapeHtml(r.narx||'—')}</div></div>
+          <div class="xg-ts">${escapeHtml(r.vaqt||'')}</div>
+        </div>
+        <div class="xg-stamp-row">
+          <div class="xg-stamp ${sc}">${escapeHtml(r.signal||'KUTIB TURISH')}</div>
+          <div style="flex:1;">
+            <p class="xg-section-label" style="margin-top:0;">Ishonch darajasi</p>
+            <div class="xg-conf-track"><div class="xg-conf-fill" style="width:${conf}%;"></div></div>
+            <p class="xg-conf-num">${conf}%</p>
+          </div>
+        </div>
+        <p class="xg-section-label">Savdo darajalari</p>
+        <div class="xg-levels">
+          <div class="xg-level-card"><div class="l">Kirish</div><div class="v">${escapeHtml(r.kirish_narxi||'—')}</div></div>
+          <div class="xg-level-card"><div class="l">Stop-loss</div><div class="v">${escapeHtml(r.stop_loss||'—')}</div></div>
+          <div class="xg-level-card"><div class="l">Take-profit</div><div class="v">${escapeHtml(r.take_profit||'—')}</div></div>
+          <div class="xg-level-card"><div class="l">Support</div><div class="v">${escapeHtml(r.support||'—')}</div></div>
+          <div class="xg-level-card"><div class="l">Resistance</div><div class="v">${escapeHtml(r.resistance||'—')}</div></div>
+          <div class="xg-level-card"><div class="l">Tendensiya</div><div class="v">${escapeHtml(r.tendensiya||'—')}</div></div>
+        </div>
+        ${posHtml}
+        <p class="xg-section-label">Texnik tahlil</p>
+        <div class="xg-tech-grid">
+          <div class="xg-tech-card"><div class="l">Fibonacci darajalari</div><div class="v">${escapeHtml(r.fibonacci||'—')}</div></div>
+          <div class="xg-tech-card"><div class="l">Order block</div><div class="v">${escapeHtml(r.order_block||'—')}</div></div>
+          <div class="xg-tech-card"><div class="l">Sham modeli</div><div class="v">${escapeHtml(r.sham_pattern||'—')}</div></div>
+        </div>
+        <p class="xg-section-label">Asosiy omillar</p>
+        <ul class="xg-drivers">${drivers.map(d=>`<li>${escapeHtml(d)}</li>`).join('')}</ul>
+        <p class="xg-section-label">Qisqa istiqbol</p>
+        <p class="xg-outlook">${escapeHtml(r.istiqbol||'')}</p>
+      </div>`;
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('xg-history-list');
+    if (!history.length) { list.innerHTML = '<p class="xg-sub">Hali tahlil tarixi yo\'q.</p>'; return; }
+    list.innerHTML = history.map(h => `<div class="xg-history-item"><span>${escapeHtml(h.time)}</span><b>${escapeHtml(h.narx)}</b><span>${escapeHtml(h.signal)} (${escapeHtml(String(h.ishonch))}%)</span></div>`).join('');
+  }
+
+  document.getElementById('xg-auto').addEventListener('change', (e) => {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    if (e.target.checked) {
+      const mins = parseInt(document.getElementById('xg-interval').value, 10);
+      autoTimer = setInterval(runAnalysis, mins * 60 * 1000);
+      runAnalysis();
+    }
+  });
+  document.getElementById('xg-interval').addEventListener('change', () => {
+    if (autoTimer) { clearInterval(autoTimer); const mins = parseInt(document.getElementById('xg-interval').value,10); autoTimer = setInterval(runAnalysis, mins*60*1000); }
+  });
+
+  btn.addEventListener('click', runAnalysis);
+
+  const chatbox = document.getElementById('xg-chatbox');
+  const chatInput = document.getElementById('xg-chat-input');
+  let chatHistory = [];
+  function addMsg(role, text) {
+    const div = document.createElement('div');
+    div.className = 'xg-msg ' + (role==='user'?'user':'ai');
+    div.textContent = text;
+    chatbox.appendChild(div);
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
+  async function sendChat() {
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+    addMsg('user', msg);
+    chatInput.value = '';
+    chatHistory.push({role:'user', text:msg});
+    addMsg('ai', 'Yozmoqda...');
+    try {
+      const context = `Foydalanuvchi profili: balans $${settings.balance}, leverage 1:${settings.leverage}, spred $${settings.spread}, xavf foizi ${settings.risk}%, broker: ${settings.broker||'ko\'rsatilmagan'}. Oxirgi bilingan narx: ${lastPrice||'nomalum'}, oxirgi signal: ${lastSignal||'nomalum'}.`;
+      const prompt = `Sen XAUUSD (oltin) savdosi bo'yicha AI yordamchisisan. ${context} Foydalanuvchi savoli: "${msg}". Kerak bo'lsa web qidiruvdan foydalanib qisqa, aniq va o'zbek tilida javob ber. Moliyaviy maslahat emasligini va yakuniy qarorni foydalanuvchi o'zi qabul qilishi kerakligini eslatib o't, lekin javobni juda uzun qilma.`;
+      const text = await callClaude(prompt, true);
+      chatbox.removeChild(chatbox.lastChild);
+      addMsg('ai', text.trim());
+    } catch(e) {
+      chatbox.removeChild(chatbox.lastChild);
+      addMsg('ai', 'Kechirasiz, javob olishda xatolik yuz berdi.');
+    }
+  }
+  document.getElementById('xg-chat-send').addEventListener('click', sendChat);
+  chatInput.addEventListener('keydown', (e) => { if (e.key==='Enter') sendChat(); });
+
+  loadState();
+})();
+</script>
